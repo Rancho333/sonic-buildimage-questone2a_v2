@@ -1,0 +1,16 @@
+{
+    "chassis": {
+        "DS2000": {
+            "component": {
+                "ONIE": {},
+                "ASIC_PCIe": {},
+                "SSD": {},
+                "BIOS": { },
+                "BASE_CPLD": { },
+                "BMC": { },
+                "SW_CPLD1": { },
+                "SW_CPLD2": { }
+            }
+        }
+    }
+}

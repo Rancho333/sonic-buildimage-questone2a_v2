@@ -165,6 +165,10 @@ ifeq ($(SONIC_INCLUDE_SYSTEM_GNMI),y)
 INCLUDE_SYSTEM_GNMI = y
 endif
 
+ifeq ($(SONIC_INCLUDE_SYSTEM_EVENTD),y)
+INCLUDE_SYSTEM_EVENTD = y
+endif
+
 ifeq ($(SONIC_INCLUDE_RESTAPI),y)
 INCLUDE_RESTAPI = y
 endif
@@ -393,7 +397,6 @@ $(info "SECURE_UPGRADE_SIGNING_CERT" : "$(SECURE_UPGRADE_SIGNING_CERT)")
 $(info "SECURE_UPGRADE_PROD_SIGNING_TOOL": "$(SECURE_UPGRADE_PROD_SIGNING_TOOL)")
 $(info "SECURE_UPGRADE_PROD_TOOL_ARGS"   : "$(SECURE_UPGRADE_PROD_TOOL_ARGS)")
 $(info "ONIE_IMAGE_PART_SIZE"            : "$(ONIE_IMAGE_PART_SIZE)")
-$(info "ENABLE_DHCP_GRAPH_SERVICE"       : "$(ENABLE_DHCP_GRAPH_SERVICE)")
 $(info "SHUTDOWN_BGP_ON_START"           : "$(SHUTDOWN_BGP_ON_START)")
 $(info "ENABLE_PFCWD_ON_START"           : "$(ENABLE_PFCWD_ON_START)")
 $(info "SONIC_BUFFER_MODEL"              : "$(SONIC_BUFFER_MODEL)")
@@ -423,6 +426,7 @@ $(info "INCLUDE_MGMT_FRAMEWORK"          : "$(INCLUDE_MGMT_FRAMEWORK)")
 $(info "INCLUDE_ICCPD"                   : "$(INCLUDE_ICCPD)")
 $(info "INCLUDE_SYSTEM_TELEMETRY"        : "$(INCLUDE_SYSTEM_TELEMETRY)")
 $(info "INCLUDE_SYSTEM_GNMI"             : "$(INCLUDE_SYSTEM_GNMI)")
+$(info "INCLUDE_SYSTEM_EVENTD"           : "$(INCLUDE_SYSTEM_EVENTD)")
 $(info "ENABLE_HOST_SERVICE_ON_START"    : "$(ENABLE_HOST_SERVICE_ON_START)")
 $(info "INCLUDE_RESTAPI"                 : "$(INCLUDE_RESTAPI)")
 $(info "INCLUDE_SFLOW"                   : "$(INCLUDE_SFLOW)")
@@ -441,6 +445,7 @@ $(info "ENABLE_BOOTCHART                 : "$(ENABLE_BOOTCHART)")
 $(info "INCLUDE_FIPS"             : "$(INCLUDE_FIPS)")
 $(info "ENABLE_TRANSLIB_WRITE"           : "$(ENABLE_TRANSLIB_WRITE)")
 $(info "ENABLE_NATIVE_WRITE"             : "$(ENABLE_NATIVE_WRITE)")
+$(info "ENABLE_DIALOUT"                  : "$(ENABLE_DIALOUT)")
 $(info "ENABLE_AUTO_TECH_SUPPORT"        : "$(ENABLE_AUTO_TECH_SUPPORT)")
 $(info "PDDF_SUPPORT"                    : "$(PDDF_SUPPORT)")
 $(info "MULTIARCH_QEMU_ENVIRON"          : "$(MULTIARCH_QEMU_ENVIRON)")
@@ -1128,6 +1133,9 @@ $(addprefix $(TARGET_PATH)/, $(DOCKER_IMAGES)) : $(TARGET_PATH)/%.gz : .platform
 		sudo mount --bind $(PYTHON_DEBS_PATH) $($*.gz_PATH)/python-debs $(LOG)
 		sudo mount --bind $(PYTHON_WHEELS_PATH) $($*.gz_PATH)/python-wheels $(LOG)
 		# Export variables for j2. Use path for unique variable names, e.g. docker_orchagent_debs
+		export include_system_eventd="$(INCLUDE_SYSTEM_EVENTD)"
+		export build_reduce_image_size="$(BUILD_REDUCE_IMAGE_SIZE)"
+		export sonic_asic_platform="$(patsubst %-$(CONFIGURED_ARCH),%,$(CONFIGURED_PLATFORM))"
 		$(eval export $(subst -,_,$(notdir $($*.gz_PATH)))_debs=$(shell printf "$(subst $(SPACE),\n,$(call expand,$($*.gz_DEPENDS),RDEPENDS))\n" | awk '!a[$$0]++'))
 		$(eval export $(subst -,_,$(notdir $($*.gz_PATH)))_pydebs=$(shell printf "$(subst $(SPACE),\n,$(call expand,$($*.gz_PYTHON_DEBS)))\n" | awk '!a[$$0]++'))
 		$(eval export $(subst -,_,$(notdir $($*.gz_PATH)))_whls=$(shell printf "$(subst $(SPACE),\n,$(call expand,$($*.gz_PYTHON_WHEELS)))\n" | awk '!a[$$0]++'))
@@ -1347,6 +1355,7 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
                 $(LINUX_KERNEL) \
                 $(SONIC_DEVICE_DATA) \
                 $(IFUPDOWN2) \
+                $(IPMITOOL) \
                 $(KDUMP_TOOLS) \
                 $(LIBPAM_RADIUS) \
                 $(LIBNSS_RADIUS) \
@@ -1402,7 +1411,6 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
 	export sonicadmin_user="$(USERNAME)"
 	export sonic_asic_platform="$(patsubst %-$(CONFIGURED_ARCH),%,$(CONFIGURED_PLATFORM))"
 	export enable_organization_extensions="$(ENABLE_ORGANIZATION_EXTENSIONS)"
-	export enable_dhcp_graph_service="$(ENABLE_DHCP_GRAPH_SERVICE)"
 	export enable_ztp="$(ENABLE_ZTP)"
 	export include_teamd="$(INCLUDE_TEAMD)"
 	export include_router_advertiser="$(INCLUDE_ROUTER_ADVERTISER)"
@@ -1412,6 +1420,8 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
 	export sonic_su_prod_signing_tool="/sonic/scripts/$(shell basename -- $(SECURE_UPGRADE_PROD_SIGNING_TOOL))"
 	export include_system_telemetry="$(INCLUDE_SYSTEM_TELEMETRY)"
 	export include_system_gnmi="$(INCLUDE_SYSTEM_GNMI)"
+	export include_system_eventd="$(INCLUDE_SYSTEM_EVENTD)"
+	export build_reduce_image_size="$(BUILD_REDUCE_IMAGE_SIZE)"
 	export include_restapi="$(INCLUDE_RESTAPI)"
 	export include_nat="$(INCLUDE_NAT)"
 	export include_p4rt="$(INCLUDE_P4RT)"

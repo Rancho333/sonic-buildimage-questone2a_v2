@@ -1024,7 +1024,7 @@ IPV4 DHPC Server related configuration are defined in **DHCP_SERVER_IPV4**, **DH
     "DHCP_SERVER_IPV4_CUSTOMIZED_OPTIONS": {
         "option60": {
             "id": 60,
-            "type": "text",
+            "type": "string",
             "value": "dummy_value"
         }
     },
@@ -1807,7 +1807,8 @@ optional attributes.
             "speed": "40000",
             "link_training": "off",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "enabled"
         },
         "Ethernet1": {
             "index": "1",
@@ -1819,7 +1820,8 @@ optional attributes.
             "speed": "40000",
             "link_training": "on",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "enabled"
         },
         "Ethernet63": {
             "index": "63",
@@ -1829,7 +1831,8 @@ optional attributes.
             "alias": "fortyGigE1/4/16",
             "speed": "40000",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "disabled"
         }
     }
 }
@@ -1845,7 +1848,8 @@ optional attributes.
             "mtu": "9100",
             "alias": "etp1a",
             "speed": "100000",
-            "subport": 1
+            "subport": 1,
+            "dom_polling": "enabled"
         },
         "Ethernet4": {
             "admin_status": "up",
@@ -1855,7 +1859,8 @@ optional attributes.
             "mtu": "9100",
             "alias": "etp1b",
             "speed": "100000",
-            "subport": 2
+            "subport": 2,
+            "dom_polling": "enabled"
         },
     }
 }

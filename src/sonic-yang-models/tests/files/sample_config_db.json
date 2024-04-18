@@ -351,6 +351,7 @@
         "DEVICE_METADATA": {
             "localhost": {
                 "type": "ToRRouter",
+                "asic_id": "06:00.0",
                 "mac": "00:11:22:33:dd:5a",
                 "hostname": "asw.dc",
                 "bgp_asn": "64850",
@@ -565,6 +566,9 @@
         "PORT": {
             "Ethernet0": {
                 "alias": "Eth1/1",
+                "coreId": "1",
+                "corePortId": "1",
+                "numVoq": "8",
                 "lanes": "65",
                 "description": "",
                 "speed": "11100",
@@ -581,6 +585,9 @@
             },
             "Ethernet1": {
                 "alias": "Eth1/2",
+                "coreId": "1",
+                "corePortId": "1",
+                "numVoq": "8",
                 "lanes": "66",
                 "description": "",
                 "speed": "11100",
@@ -596,11 +603,15 @@
             },
             "Ethernet2": {
                 "alias": "Eth1/3",
+                "coreId": "1",
+                "corePortId": "1",
+                "numVoq": "8",
                 "lanes": "67",
                 "description": "",
                 "speed": "11100",
                 "tpid": "0x8100",
                 "admin_status": "up",
+                "role": "Dpc",
                 "autoneg": "on",
                 "adv_speeds": "all",
                 "adv_interface_types": "all",
@@ -1701,7 +1712,7 @@
                 "ip_range": [
                     "10.1.0.0/24"
                 ],
-                "name": "BGPSentinel", 
+                "name": "BGPSentinel",
                 "src_address": "10.1.0.32"
             },
             "BGPSentinelV6": {
@@ -2624,6 +2635,14 @@
             },
             "dpu1": {
                 "midplane_interface": "dpu1"
+            }
+        },
+        "BANNER_MESSAGE": {
+            "global": {
+                "state": "enabled",
+                "login": "Some login message",
+                "motd": "Some message of the day",
+                "logout": "Some logout message"
             }
         }
     },
